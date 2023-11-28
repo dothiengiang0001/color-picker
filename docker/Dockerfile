@@ -1,4 +1,10 @@
-FROM nginx:1.17-alpine 
-COPY build /usr/share/nginx/html
+FROM jenkins/jenkins:lts
+USER root
 
-CMD ["nginx", "-g", "daemon off;"]
+RUN mkdir -p /tmp/download && \
+ curl -L https://download.docker.com/linux/static/stable/x86_64/docker-18.03.1-ce.tgz | tar -xz -C /tmp/download && \
+ rm -rf /tmp/download/docker/dockerd && \
+ mv /tmp/download/docker/docker* /usr/local/bin/ && \
+ rm -rf /tmp/download
+
+USER jenkins
